@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .action-buttons button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        #createCustomerForm {
+            width: 50%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 5px;
+        }
+
+        #responseMessage {
+            text-align: center;
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Customer List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Street</th>
+                <th>Adress</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="customerTableBody">
+            <!-- Customer data will be populated here -->
+        </tbody>
+    </table>
+
+    <h1>Create Customer</h1>
+    <div id="createCustomerForm">
+        <form id="customerForm">
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">Street:</label>
+                <input type="text" id="Street" name="street" required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">Adress:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">City:</label>
+                <input type="text" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">State:</label>
+                <input type="text" id="state" name="state" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">Phone:</label>
+                <input type="text" id="phone" name="phone" required>
+            </div>
+            <button type="button" id="createCustomerButton">Create Customer</button>
+        </form>
+        <div id="responseMessage"></div>
+    </div>
+
+    <script>
+        const customers = [
+            { first_name: "Jane", last_name: "Doe",street:"Elvnu street",address: "H no 2 ",city: "Delhi",state: "Delhi",email: "sam@gmail.com",phone: "12345678"},
+        ];
+
+        function populateCustomerTable(data) {
+            const customerTableBody = document.getElementById("customerTableBody");
+            customerTableBody.innerHTML = "";
+
+            data.forEach((customer, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${customer.first_name}</td>
+                    <td>${customer.last_name}</td>
+                    <td>${customer.street}</td>
+                    <td>${customer.address}</td>
+                    <td>${customer.city}</td>
+                    <td>${customer.state}</td>
+                    <td>${customer.email}</td>
+                    <td>${customer.phone}</td>
+                    <td class="action-buttons">
+                        <button onclick="deleteCustomer(${index})">Delete</button>
+                        <button onclick="editCustomer(${index})">Edit</button>
+                    </td>
+                `;
+
+                customerTableBody.appendChild(row);
+            });
+        }
+        function createCustomer(customerData) {
+            customers.push(customerData);
+            populateCustomerTable(customers);
+        }
+
+        document.getElementById("createCustomerButton").addEventListener("click", function () {
+            const firstName = document.getElementById("first_name").value;
+            const lastName = document.getElementById("last_name").value;
+            const email = document.getElementById("email").value;
+
+            if (firstName && lastName && email) {
+                const newCustomer = { first_name: firstName, last_name: lastName, email: email };
+                createCustomer(newCustomer);
+                document.getElementById("responseMessage").innerHTML = "Customer created successfully.";
+            } else {
+                document.getElementById("responseMessage").innerHTML = "Please fill in all fields.";
+            }
+        });
+
+    
+        populateCustomerTable(customers);
+
+        function deleteCustomer(index) {
+            customers.splice(index, 1);
+            populateCustomerTable(customers);
+        }
+
+        function editCustomer(index) {
+            const editedCustomer = prompt("Edit customer data:", JSON.stringify(customers[index]));
+            if (editedCustomer) {
+                customers[index] = JSON.parse(editedCustomer);
+                populateCustomerTable(customers);
+            }
+        }
+    </script>
+</body>
+</html>
